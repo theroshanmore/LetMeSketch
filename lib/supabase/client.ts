@@ -3,9 +3,19 @@ import { createClient } from "@supabase/supabase-js"
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ""
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
 
-// Only create client if we have valid credentials
+// Validate URL format
+const isValidUrl = (url: string) => {
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
+
+// Only create client if we have valid credentials and URL
 export const supabase =
-  supabaseUrl && supabaseAnonKey
+  supabaseUrl && supabaseAnonKey && isValidUrl(supabaseUrl)
     ? createClient(supabaseUrl, supabaseAnonKey, {
         realtime: {
           params: {

@@ -235,6 +235,10 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
   },
 
   saveToLocalStorage: (name: string) => {
+    // Check if we're in the browser (client-side)
+    if (typeof window === 'undefined') {
+      return
+    }
     const jsonData = get().exportToJSON()
     const savedDrawings = JSON.parse(localStorage.getItem("excalidraw-drawings") || "{}")
     savedDrawings[name] = {
@@ -246,6 +250,10 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
   loadFromLocalStorage: (name: string) => {
     try {
+      // Check if we're in the browser (client-side)
+      if (typeof window === 'undefined') {
+        return false
+      }
       const savedDrawings = JSON.parse(localStorage.getItem("excalidraw-drawings") || "{}")
       const drawing = savedDrawings[name]
 
@@ -261,6 +269,10 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
   getSavedDrawings: () => {
     try {
+      // Check if we're in the browser (client-side)
+      if (typeof window === 'undefined') {
+        return []
+      }
       const savedDrawings = JSON.parse(localStorage.getItem("excalidraw-drawings") || "{}")
       return Object.keys(savedDrawings).sort((a, b) => {
         const timeA = new Date(savedDrawings[a].timestamp).getTime()
@@ -275,6 +287,10 @@ export const useCanvasStore = create<CanvasStore>((set, get) => ({
 
   deleteSavedDrawing: (name: string) => {
     try {
+      // Check if we're in the browser (client-side)
+      if (typeof window === 'undefined') {
+        return
+      }
       const savedDrawings = JSON.parse(localStorage.getItem("excalidraw-drawings") || "{}")
       delete savedDrawings[name]
       localStorage.setItem("excalidraw-drawings", JSON.stringify(savedDrawings))
